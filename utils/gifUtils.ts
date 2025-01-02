@@ -71,11 +71,11 @@ export async function pixelateGif(
         resolve(URL.createObjectURL(blob))
       })
 
-      gif.on('error', (error: Error) => {
-        reject(error)
-      })
-
-      gif.render()
+      try {
+        gif.render()
+      } catch (error) {
+        reject(error instanceof Error ? error : new Error('GIF rendering failed'))
+      }
 
       // Cleanup
       URL.revokeObjectURL(img.src)
